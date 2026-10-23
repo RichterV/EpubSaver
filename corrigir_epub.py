@@ -84,7 +84,10 @@ except ImportError:
 #   frequências do inglês: lista do pyspellchecker
 URL_LIBREOFFICE = "https://raw.githubusercontent.com/LibreOffice/dictionaries/master/"
 URL_ICF = "https://raw.githubusercontent.com/fserb/pt-br/master/icf"
-DIR_CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "corrigir_epub"
+if sys.platform == "win32":
+    DIR_CACHE = Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local")) / "corrigir_epub"
+else:
+    DIR_CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "corrigir_epub"
 # no executável gerado pelo PyInstaller os dicionários vêm embutidos
 DIR_EMBUTIDO = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent)) / "dicionarios"
 ICF_MAXIMO = 25.0   # icf vai de ~3 (muito comum) a ~24 (vista uma vez)

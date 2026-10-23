@@ -1,0 +1,59 @@
+# Gera os executáveis Linux e Windows. Numa tag "v*" (ex.: v1.2.0) eles são
+# anexados a uma Release do GitHub; manualmente (Actions → Run workflow) ficam
+# só como artefatos da execução.
+name: build
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          # ubuntu-22.04: glibc mais antiga, o executável roda em mais distribuições
+          - os: ubuntu-22.04
+            arquivo: dist/corrigir-epub
+            nome: corrigir-epub-linux-x86_64
+          - os: windows-latest
+            arquivo: dist/corrigir-epub.exe
+            nome: corrigir-epub-windows-x64.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Build (Linux)
+        if: runner.os == 'Linux'
+        run: bash build.sh
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: powershell -ExecutionPolicy Bypass -File build.ps1
+
+      - name: Renomear
+        shell: bash
+        run: mv "${{ matrix.arquivo }}" "${{ matrix.nome }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.nome }}
+          path: ${{ matrix.nome }}
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Publicar a Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" \
+            --title "EpubSaver $GITHUB_REF_NAME" --generate-notes \
+            corrigir-epub-linux-x86_64 corrigir-epub-windows-x64.exe

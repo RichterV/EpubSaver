@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Ícone do EpubSaver: livro aberto com um cavalo-marinho no meio -->
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f8fa8"/>
+      <stop offset="1" stop-color="#0d4f66"/>
+    </linearGradient>
+    <linearGradient id="cavalo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#f0643a"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="url(#fundo)"/>
+
+  <!-- capa -->
+  <path d="M128 76 C100 62 62 58 26 66 L26 204 C62 196 100 200 128 216 C156 200 194 196 230 204 L230 66 C194 58 156 62 128 76 Z"
+        fill="#0a3a4c"/>
+  <!-- páginas -->
+  <path d="M128 70 C102 56 66 52 36 58 L36 192 C66 186 102 190 128 204 Z" fill="#fdf6e3"/>
+  <path d="M128 70 C154 56 190 52 220 58 L220 192 C190 186 154 190 128 204 Z" fill="#f3e9cf"/>
+  <path d="M128 70 L128 204" stroke="#c9b98f" stroke-width="2"/>
+  <!-- linhas de texto -->
+  <g stroke="#d8cba6" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M50 82 C66 79 80 79 92 81"/>
+    <path d="M50 100 C64 97 76 97 86 99"/>
+    <path d="M50 118 C62 116 72 116 82 117"/>
+    <path d="M50 136 C62 134 72 134 82 135"/>
+    <path d="M50 154 C62 152 72 152 84 153"/>
+    <path d="M50 172 C64 170 78 170 92 172"/>
+    <path d="M164 81 C176 79 190 79 206 82"/>
+    <path d="M174 99 C184 97 196 97 206 100"/>
+    <path d="M176 117 C186 116 196 116 206 118"/>
+    <path d="M176 135 C186 134 196 134 206 136"/>
+    <path d="M174 153 C186 152 196 152 206 154"/>
+    <path d="M164 172 C178 170 192 170 206 172"/>
+  </g>
+
+  <!-- cavalo-marinho -->
+  <g transform="translate(86 58)">
+    <!-- cauda enrolada -->
+    <path d="M40 112 C30 128 30 146 44 150 C56 153 62 140 54 134 C48 130 42 136 46 141"
+          fill="none" stroke="url(#cavalo)" stroke-width="11" stroke-linecap="round"/>
+    <!-- corpo e cabeça -->
+    <path d="M38 14
+             C44 4 58 4 62 14
+             L84 18 C88 19 88 27 84 28 L62 32
+             C60 38 62 42 66 48
+             C76 62 78 84 66 100
+             C60 108 52 114 44 118
+             C38 108 36 100 38 92
+             C30 86 30 76 36 68
+             C28 60 28 50 36 44
+             C32 36 32 24 38 14 Z"
+          fill="url(#cavalo)"/>
+    <!-- crista e nadadeira -->
+    <path d="M36 44 C26 46 22 54 28 58 C30 54 33 50 36 50 Z" fill="#f0643a"/>
+    <path d="M36 68 C24 70 20 80 28 84 C30 78 33 74 37 74 Z" fill="#f0643a"/>
+    <path d="M44 10 L42 0 L50 7 L54 -1 L56 9 Z" fill="#f0643a"/>
+    <!-- barriga listrada -->
+    <g stroke="#fdf6e3" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M58 58 C64 60 68 62 70 66"/>
+      <path d="M60 72 C66 74 70 76 72 80"/>
+      <path d="M58 86 C64 88 67 90 68 94"/>
+    </g>
+    <!-- olho -->
+    <circle cx="52" cy="20" r="5" fill="#fdf6e3"/>
+    <circle cx="53" cy="20" r="2.6" fill="#0a3a4c"/>
+  </g>
+</svg>

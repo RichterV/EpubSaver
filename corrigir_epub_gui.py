@@ -5,8 +5,9 @@ Interface gráfica do corrigir_epub — criado por Vinicius Richter.
 Escolhe um EPUB, pergunta onde salvar a
 versão corrigida e mostra o progresso e cada etapa da correção.
 
-Usa os diálogos nativos do sistema (zenity ou kdialog) quando existem e os do
-Tk caso contrário. É o ponto de entrada do executável gerado pelo build.sh.
+No Linux usa os diálogos nativos do sistema (zenity ou kdialog) quando existem
+e os do Tk caso contrário; no Windows os do Tk já são os nativos. É o ponto de
+entrada do executável gerado pelo build.sh (Linux) e pelo build.ps1 (Windows).
 
 Uso direto (sem diálogos, útil para testes):
     python3 corrigir_epub_gui.py entrada.epub saida.epub [--fechar-ao-terminar]
@@ -28,6 +29,8 @@ import corrigir_epub as ce
 
 TITULO = "Corrigir EPUB"
 CREDITO = f"Criado por {ce.AUTOR}"
+# no executável o ícone vem embutido (sys._MEIPASS); rodando do código, está em icone/
+ICONE = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent)) / "icone" / "icone.png"
 
 
 # --------------------------------------------------------------------------
@@ -88,6 +91,9 @@ def escolher_saida(raiz, sugestao):
 
 
 def abrir_no_sistema(caminho):
+    if sys.platform == "win32":
+        os.startfile(caminho)  # noqa: S606 - abre no programa padrão do Windows
+        return
     for prog in ("xdg-open", "gio"):
         if shutil.which(prog):
             cmd = [prog, str(caminho)] if prog == "xdg-open" else [prog, "open", str(caminho)]
@@ -127,9 +133,13 @@ class Aplicativo:
         raiz.title(f"{TITULO} — {CREDITO}")
         raiz.minsize(620, 420)
         raiz.protocol("WM_DELETE_WINDOW", self.fechar)
+        if ICONE.exists():
+            self.icone = tk.PhotoImage(file=str(ICONE))
+            raiz.iconphoto(True, self.icone)
         estilo = ttk.Style(raiz)
-        if "clam" in estilo.theme_names():
-            estilo.theme_use("clam")
+        tema = "vista" if sys.platform == "win32" else "clam"
+        if tema in estilo.theme_names():
+            estilo.theme_use(tema)
         fonte_etapa = font.nametofont("TkDefaultFont").copy()
         fonte_etapa.configure(weight="bold", size=fonte_etapa.cget("size") + 1)
         estilo.configure("Etapa.TLabel", font=fonte_etapa)
@@ -306,6 +316,12 @@ class Aplicativo:
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if sys.platform == "win32":
+        try:  # sem isso o Windows amplia a janela e o texto fica borrado em telas com escala
+            import ctypes
+            ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        except (AttributeError, OSError):
+            pass
     raiz = tk.Tk()
     Aplicativo(raiz, *(args[:2] if len(args) >= 2 else (None, None)),
                fechar_ao_terminar="--fechar-ao-terminar" in sys.argv)

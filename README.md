@@ -2,10 +2,74 @@
 
 Corrige EPUBs mal convertidos (principalmente os gerados a partir de PDF/OCR)
 em **português** ou **inglês**: erros de ortografia e de OCR, espaçamento,
-pontuação, parágrafos partidos, capítulos e sumário. Funciona pela linha de
-comando ou como um executável Linux com interface gráfica.
+pontuação, parágrafos partidos, capítulos e sumário. Funciona como um
+programa com interface gráfica, para Linux e Windows, ou pela linha de comando.
 
 Criado por Vinicius Richter.
+
+<p align="center"><img src="icone/icone.png" width="128" alt="Ícone do EpubSaver"></p>
+
+## Instalação
+
+O programa é um arquivo único: não precisa instalar Python nem nada mais. Os
+dicionários vão embutidos, então ele funciona offline.
+
+Baixe a versão mais recente na página de
+[Releases](https://github.com/RichterV/EpubSaver/releases/latest).
+
+### Windows
+
+1. Baixe `corrigir-epub-windows-x64.exe`.
+2. Dê dois cliques no arquivo. Se quiser, mova-o antes para uma pasta fixa (ex.:
+   `Documentos`) e crie um atalho na Área de Trabalho (botão direito →
+   *Mostrar mais opções* → *Enviar para* → *Área de trabalho*).
+3. Na primeira vez, o Windows pode mostrar "O Windows protegeu o computador",
+   porque o executável não é assinado digitalmente. Clique em
+   **Mais informações** → **Executar assim mesmo**.
+
+Requer Windows 10 ou 11 (64 bits).
+
+### Linux
+
+1. Baixe `corrigir-epub-linux-x86_64`.
+2. Dê permissão de execução e abra:
+
+   ```bash
+   chmod +x corrigir-epub-linux-x86_64
+   ./corrigir-epub-linux-x86_64
+   ```
+
+   Ou, no gerenciador de arquivos: botão direito → *Propriedades* → marque
+   *Permitir executar como programa* e dê dois cliques.
+
+Para colocar o programa no menu de aplicativos, com ícone:
+
+```bash
+mkdir -p ~/.local/bin ~/.local/share/icons ~/.local/share/applications
+mv corrigir-epub-linux-x86_64 ~/.local/bin/corrigir-epub
+curl -L -o ~/.local/share/icons/epubsaver.png \
+    https://raw.githubusercontent.com/RichterV/EpubSaver/main/icone/icone.png
+cat > ~/.local/share/applications/epubsaver.desktop <<FIM
+[Desktop Entry]
+Type=Application
+Name=EpubSaver
+Comment=Corrige EPUBs mal convertidos
+Exec=$HOME/.local/bin/corrigir-epub
+Icon=$HOME/.local/share/icons/epubsaver.png
+Categories=Office;
+FIM
+```
+
+Requer Linux de 64 bits (x86_64) com interface gráfica. O executável é gerado
+no Ubuntu 22.04 e roda nas distribuições daquela época em diante.
+
+## Uso
+
+1. Escolha o EPUB.
+2. Escolha onde salvar a versão corrigida. O original nunca é sobrescrito.
+3. Acompanhe a barra de progresso e as etapas na janela.
+
+Ao terminar, é possível abrir o relatório ou a pasta.
 
 ## O que é corrigido
 
@@ -43,24 +107,6 @@ Cada execução gera um **relatório** (`<saída>.relatorio.txt`) com:
 - tudo o que foi alterado;
 - a lista de palavras desconhecidas que *não* foram mexidas, para revisão manual.
 
-## Executável com interface gráfica
-
-```bash
-./build.sh              # gera dist/corrigir-epub (~26 MB, arquivo único)
-./dist/corrigir-epub
-```
-
-1. Escolha o EPUB.
-2. Escolha onde salvar a versão corrigida. O original nunca é sobrescrito.
-3. Acompanhe a barra de progresso e as etapas na janela.
-
-Ao terminar, é possível abrir o relatório ou a pasta. Os dicionários vão
-embutidos no executável, então ele funciona offline.
-
-O build requer apenas o [uv](https://docs.astral.sh/uv/). Ele baixa o Python
-(com Tk), o PyInstaller e as dependências num ambiente isolado; nada é
-instalado no sistema.
-
 ## Linha de comando
 
 ```bash
@@ -83,13 +129,45 @@ uv run corrigir_epub.py livro.epub --simular        # só gera o relatório
 
 Sem o uv: `pip install lxml pyspellchecker` e `python3 corrigir_epub.py ...`.
 Os dicionários são baixados na primeira execução e guardados em
-`~/.cache/corrigir_epub`.
+`~/.cache/corrigir_epub` (Linux) ou `%LOCALAPPDATA%\corrigir_epub` (Windows).
+
+## Gerar o executável
+
+Os dois scripts requerem apenas o [uv](https://docs.astral.sh/uv/). Ele baixa o
+Python (com Tk), o PyInstaller e as dependências num ambiente isolado; nada é
+instalado no sistema. Cada executável precisa ser gerado no próprio sistema:
+o PyInstaller não gera um `.exe` a partir do Linux.
+
+```bash
+./build.sh              # Linux: gera dist/corrigir-epub (~26 MB)
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File build.ps1   # Windows: gera dist\corrigir-epub.exe
+```
+
+### Publicar uma versão
+
+O workflow [`.github/workflows/build.yml`](.github/workflows/build.yml) gera os
+dois executáveis no GitHub Actions. Ao enviar uma tag `v*`, ele cria a Release
+com os dois arquivos anexados:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Também dá para rodá-lo manualmente (*Actions* → *build* → *Run workflow*); aí os
+executáveis ficam só como artefatos da execução.
 
 ## Arquivos
 
 - `corrigir_epub.py`: o corretor (biblioteca + linha de comando).
 - `corrigir_epub_gui.py`: interface gráfica (Tk) e ponto de entrada do executável.
-- `build.sh`: gera o executável de arquivo único com PyInstaller.
+- `build.sh` / `build.ps1`: geram o executável de arquivo único com PyInstaller (Linux / Windows).
+- `preparar_dicionarios.py`: junta os dicionários que os builds embutem.
+- `icone/`: ícone do programa (`icone.svg` é a fonte; `icone.png` e `icone.ico` são gerados dele).
+- `.github/workflows/build.yml`: builds e Releases no GitHub Actions.
 
 ## Dicionários e licenças
 
