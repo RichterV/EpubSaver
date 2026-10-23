@@ -46,8 +46,8 @@ LD_LIBRARY_PATH="$PY_LIB${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
     --workpath "$BUILD/pyinstaller" \
     --specpath "$BUILD" \
     --add-data "$BUILD/dicionarios:dicionarios" \
-    --add-data "$BUILD/spellchecker/en.json.gz:spellchecker/resources" \
-    --add-data "$PWD/icone/icone.png:icone" \
+    --add-data "$BUILD/spellchecker:spellchecker/resources" \
+    --add-data "$PWD/icone:icone" \
     --log-level WARN \
     corrigir_epub_gui.py
 

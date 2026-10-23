@@ -26,7 +26,8 @@ for url, cache in arquivos:
     origem = ce.baixar(url, cache)
     shutil.copy(origem, build / "dicionarios" / cache.name)
     print(f"    {cache.name:12s} {origem.stat().st_size / 1e6:6.1f} MB")
-# do pyspellchecker só o inglês é usado (frequências do inglês)
-en = Path(spellchecker.__file__).parent / "resources" / "en.json.gz"
-shutil.copy(en, build / "spellchecker" / en.name)
-print(f"    {en.name:12s} {en.stat().st_size / 1e6:6.1f} MB")
+# do pyspellchecker: frequências do inglês e as palavras de outros idiomas que não são "corrigidas"
+for idioma in sorted({"en"} | {i for v in ce.ESTRANGEIROS.values() for i in v}):
+    arq = Path(spellchecker.__file__).parent / "resources" / f"{idioma}.json.gz"
+    shutil.copy(arq, build / "spellchecker" / arq.name)
+    print(f"    {arq.name:12s} {arq.stat().st_size / 1e6:6.1f} MB")

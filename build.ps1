@@ -47,8 +47,8 @@ Invoke-Uv @UvRun --with pyinstaller pyinstaller `
     --workpath (Join-Path $Build "pyinstaller") `
     --specpath $Build `
     --add-data "$(Join-Path $Build 'dicionarios');dicionarios" `
-    --add-data "$(Join-Path $Build 'spellchecker\en.json.gz');spellchecker\resources" `
-    --add-data "$(Join-Path $PWD 'icone\icone.png');icone" `
+    --add-data "$(Join-Path $Build 'spellchecker');spellchecker\resources" `
+    --add-data "$(Join-Path $PWD 'icone');icone" `
     --log-level WARN `
     corrigir_epub_gui.py
 
