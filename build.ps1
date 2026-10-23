@@ -25,20 +25,21 @@ if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
 $UvRun = @("run", "--no-project", "--python-preference", "only-managed", "--python", $PythonVersao,
            "--with", "lxml", "--with", "pyspellchecker")
 
-function Uv {
-    & uv @args
+# o nome não pode ser "uv": o PowerShell não diferencia maiúsculas e a função chamaria a si mesma
+function Invoke-Uv {
+    & uv.exe @args
     if ($LASTEXITCODE -ne 0) { throw "falhou: uv $args" }
 }
 
 Write-Host "==> Verificando Python $PythonVersao com Tk"
-Uv @UvRun python -c "import tkinter, lxml, spellchecker"
+Invoke-Uv @UvRun python -c "import tkinter, lxml, spellchecker"
 
 Write-Host "==> Preparando dicionários"
-Uv @UvRun python preparar_dicionarios.py $Build
+Invoke-Uv @UvRun python preparar_dicionarios.py $Build
 
 Write-Host "==> Gerando o executável (PyInstaller)"
 # no Windows o separador de --add-data é ";"
-Uv @UvRun --with pyinstaller pyinstaller `
+Invoke-Uv @UvRun --with pyinstaller pyinstaller `
     --noconfirm --clean --onefile --windowed `
     --name $Nome `
     --icon (Join-Path $PWD "icone\icone.ico") `
