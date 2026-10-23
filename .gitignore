@@ -1,0 +1,11 @@
+# saídas do build
+build/
+dist/
+*.spec
+
+# livros e relatórios (não versionar obras de terceiros)
+*.epub
+*.relatorio.txt
+
+__pycache__/
+.ruff_cache/
