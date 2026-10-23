@@ -4,8 +4,16 @@ dist/
 *.spec
 
 # livros e relatórios (não versionar obras de terceiros)
+Exemplos/
 *.epub
 *.relatorio.txt
+
+# arquivos que o Windows cria sozinho
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.lnk
+$RECYCLE.BIN/
 
 __pycache__/
 .ruff_cache/
