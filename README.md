@@ -154,35 +154,6 @@ Sem o uv: `pip install lxml pyspellchecker` e `python3 corrigir_epub.py ...`.
 Os dicionários são baixados na primeira execução e guardados em
 `~/.cache/corrigir_epub` (Linux) ou `%LOCALAPPDATA%\corrigir_epub` (Windows).
 
-## Gerar o executável
-
-Os dois scripts requerem apenas o [uv](https://docs.astral.sh/uv/). Ele baixa o
-Python (com Tk), o PyInstaller e as dependências num ambiente isolado; nada é
-instalado no sistema. Cada executável precisa ser gerado no próprio sistema:
-o PyInstaller não gera um `.exe` a partir do Linux.
-
-```bash
-./build.sh              # Linux: gera dist/corrigir-epub (~26 MB)
-```
-
-```powershell
-powershell -ExecutionPolicy Bypass -File build.ps1   # Windows: gera dist\corrigir-epub.exe
-```
-
-### Publicar uma versão
-
-O workflow [`.github/workflows/build.yml`](.github/workflows/build.yml) gera os
-dois executáveis no GitHub Actions. Ao enviar uma tag `v*`, ele cria a Release
-com os dois arquivos anexados:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Também dá para rodá-lo manualmente (*Actions* → *build* → *Run workflow*); aí os
-executáveis ficam só como artefatos da execução.
-
 ## Arquivos
 
 - `corrigir_epub.py`: o corretor (biblioteca + linha de comando).
