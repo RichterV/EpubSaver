@@ -158,7 +158,7 @@ Os dicionários são baixados na primeira execução e guardados em
 
 - `corrigir_epub.py`: o corretor (biblioteca + linha de comando).
 - `corrigir_epub_gui.py`: interface gráfica (Tk) e ponto de entrada do executável.
-- `build.sh` / `build.ps1`: geram o executável de arquivo único com PyInstaller (Linux / Windows).
+- `build.sh` / `build.ps1`: geram o executável de arquivo único com PyInstaller (Linux / Windows). No Linux é preciso o Tk do sistema (`sudo apt install python3-tk`).
 - `preparar_dicionarios.py`: junta os dicionários que os builds embutem.
 - `icone/`: ícone do programa (`icone.svg` é a fonte; `icone.png`, `icone.ico` e as versões menores usadas na janela são gerados dele).
 - `.github/workflows/build.yml`: builds e Releases no GitHub Actions.

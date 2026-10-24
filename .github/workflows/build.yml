@@ -27,7 +27,9 @@ jobs:
 
       - name: Build (Linux)
         if: runner.os == 'Linux'
-        run: bash build.sh
+        run: |
+          sudo apt-get update && sudo apt-get install -y python3-tk
+          bash build.sh
       - name: Build (Windows)
         if: runner.os == 'Windows'
         run: powershell -ExecutionPolicy Bypass -File build.ps1
